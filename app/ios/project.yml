@@ -1,0 +1,18 @@
+name: Ant
+options:
+  bundleIdPrefix: com.antxr
+targets:
+  Ant:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - Ant
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.antxr.runtime
+        SWIFT_VERSION: 5.0
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
