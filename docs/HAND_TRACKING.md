@@ -27,34 +27,47 @@ OPEN, FIST, POINT, PINCH, THREE, UNKNOWN.
 Camera rendering and IMU remain independent from pose inference. Pose inference may run at a lower cadence and landmarks are temporally filtered between inference frames. A slow pose frame must not stall the camera loop.
 
 ## ANT HAND v0.1 dataset baseline
-The first trainable V2 capture contains 600 labeled samples:
-- 300 LEFT
-- 300 RIGHT
-- each sample includes a 224x224 JPEG hand crop and the 21 teacher landmarks
+The current trainable V2 corpus contains 1,200 samples in four 300-frame capture sessions:
+- 600 physical LEFT
+- 600 physical RIGHT
+- each sample includes a 224x224 JPEG hand crop and 21 teacher landmarks
 - source frame size and normalized crop rectangle are retained
 
-This is the initial experimental corpus, not a production-complete dataset. Teacher labels can inherit teacher-model errors.
+Physical hand labels are defined by the capture-session label supplied by the operator, not by the teacher handedness field. The teacher handedness output disagrees with the known physical hand in parts of the corpus, so it must not be treated as ground truth.
+
+The 1,200-sample corpus is experimental, not production-complete. Teacher landmarks can inherit teacher-model errors.
+
+### Verified quality audit (1,200 V2 samples)
+- 1,200/1,200 samples contain exactly 21 finite landmarks.
+- 1,200/1,200 embedded JPEGs decode successfully at 224x224.
+- 1,200/1,200 crop rectangles are structurally valid.
+- Some crop-normalized x/y landmarks fall outside [0,1], concentrated in captures near source-frame boundaries. Keep these samples flagged for review rather than silently clamping labels.
+- Current ROI crops are rectangular and then resized to 224x224. Their aspect ratios vary substantially, so this can geometrically stretch the hand. Future collection should use a square padded crop before resize.
 
 ### Split policy
 Do not randomly split adjacent frames. Captures from the same short motion sequence are strongly correlated and can leak nearly identical images into train and validation/test.
 
-Prepare groups of temporally adjacent/visually similar samples first, then assign whole groups approximately:
+Group temporally adjacent/visually similar samples first, then assign whole groups approximately:
 - 70% train
 - 15% validation
 - 15% test
 
-Keep LEFT/RIGHT balanced inside every split. Near-duplicate frames must remain in the same group.
+Keep physical LEFT/RIGHT balanced inside every split. Near-duplicate frames must remain in the same group.
 
 ### Quality gate
 Before training:
 1. Require exactly 21 finite landmarks.
 2. Require a decodable 224x224 image.
-3. Reject invalid/out-of-bounds crop metadata.
-4. Flag severe crop truncation/occlusion for review instead of silently treating it as clean ground truth.
-5. Deduplicate near-identical consecutive poses/images.
-6. Preserve handedness explicitly.
+3. Require valid crop metadata.
+4. Flag crop-boundary/truncation/occlusion cases for review.
+5. Deduplicate or group near-identical consecutive poses/images.
+6. Preserve the operator-confirmed physical handedness independently from teacher handedness.
+7. Do not clamp teacher landmarks merely to force x/y into [0,1].
 
 ### v0.1 objective
-Ant Hand v0.1 learns image crop -> 21 normalized landmarks. Handedness can remain metadata for v0.1 instead of being a required prediction head.
+Ant Hand v0.1 learns image crop -> 21 normalized landmarks. Handedness remains metadata for v0.1 instead of a required prediction head.
 
 The temporary teacher is used only to bootstrap labels. Evaluation must use a held-out split and later manually reviewed ground truth. The goal is to replace the teacher runtime once Ant Hand reaches acceptable accuracy and iPhone inference latency.
+
+### Next collection format
+Before collecting a larger corpus, Dataset Lab should switch to a square padded ROI (preserve aspect ratio) and explicit operator-selected physical hand (LEFT/RIGHT). This prevents geometric distortion and avoids relying on teacher handedness.
