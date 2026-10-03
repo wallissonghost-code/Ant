@@ -1,0 +1,18 @@
+name: Build Ant Hand Web Model
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Explain required training corpus
+        run: |
+          echo "Ant Hand v0.1 web export requires the four V2 training JSON captures."
+          echo "They intentionally are not committed because each embeds camera JPEG data."
+          echo "Run training/ant_hand_v01.py with the local captures, then convert/export the resulting model."
+      - name: Validate web runtime contract
+        run: python training/validate_web_contract.py
