@@ -1,0 +1,20 @@
+{
+  "model": "Ant Hand v0.1 experimental",
+  "samples": 1200,
+  "physical_hands": {"LEFT": 600, "RIGHT": 600},
+  "split": {"train": 850, "validation": 150, "test": 200},
+  "split_policy": "temporal groups of 25 frames, stratified by physical hand",
+  "input": [112, 112, 3],
+  "output": 42,
+  "epochs_ran": 11,
+  "best_validation_huber": 0.010364062804728746,
+  "test_mae_normalized": 0.1171007167015757,
+  "test_mean_point_error_normalized": 0.1825779527425766,
+  "status": "TRAINED_EXPERIMENTAL_NOT_RUNTIME_READY",
+  "notes": [
+    "This is the first real training run over the 1200-sample V2 corpus.",
+    "Physical hand labels come from capture-session labels, not teacher handedness.",
+    "Teacher landmarks are pseudo-labels and are not independent human ground truth.",
+    "The model must be converted to a browser/on-device runtime format and benchmarked side-by-side before replacing the teacher."
+  ]
+}
