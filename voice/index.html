@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050708">
+<title>ANT Voice Lab</title>
+<link rel="stylesheet" href="./voice.css">
+</head>
+<body>
+<main>
+<header><div><b>ANT VOICE LAB</b><span>v0.1 • LOCAL DATASET</span></div><a href="/">HAND LAB</a></header>
+<section class="hero">
+<div class="orb" id="orb"><i></i></div>
+<h1 id="state">AGUARDANDO</h1>
+<p id="detail">O microfone só é ativado quando você mandar gravar.</p>
+<div class="meter"><i id="level"></i></div>
+</section>
+<section class="panel">
+<label>PALAVRA / INTENÇÃO<input id="label" maxlength="32" placeholder="ex.: ant, sim, não, abrir"></label>
+<div class="actions"><button id="record">GRAVAR AMOSTRA</button><button id="stop" disabled>PARAR</button></div>
+<div class="stats"><span id="count">0 AMOSTRAS</span><span id="labels">0 LABELS</span><span id="privacy">SEM UPLOAD</span></div>
+</section>
+<section class="panel list"><div class="title"><b>DATASET LOCAL</b><button id="export" disabled>EXPORTAR</button></div><div id="samples" class="empty">Nenhuma amostra gravada.</div></section>
+<section class="panel diagnostics">
+<b>DIAGNÓSTICO</b>
+<span id="mic">MIC: OFF</span><span id="ctx">AUDIO: OFF</span><span>REDE DO VOICE ENGINE: NÃO UTILIZADA</span><span id="store">ARMAZENAMENTO: MEMÓRIA TEMPORÁRIA</span>
+</section>
+</main>
+<script type="module" src="./voice.js"></script>
+</body>
+</html>
